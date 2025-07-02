@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface CompetenceMapper {
 
@@ -19,5 +21,9 @@ public interface CompetenceMapper {
 
     SousCompetenceDto sousCompetenceToSousCompetenceDto(SousCompetences sousCompetence);
     SousCompetences sousCompetenceDtoToSousCompetence(SousCompetenceDto dto);
+
+    List<SousCompetenceDto> toSousCompetenceDtos(List<SousCompetences> list);
+    List<SousCompetences> toSousCompetenceEntities(List<SousCompetenceDto> list);
+
 
 }

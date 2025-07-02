@@ -30,13 +30,21 @@ public class CompetenceServiceImpl implements CompetenceService {
     public CompetenceDto createCompetence(CompetenceDto dto) {
         Competence competence = competenceMapper.competenceDtoToCompetence(dto);
         competence.setId(null);//nouvelle entité
+        if (competence.getSousCompetences() != null) {
+            for (SousCompetences sc : competence.getSousCompetences()) {
+                sc.setCompetence(competence);
+            }
+        }
         Competence saved = competenceRepository.save(competence);
         return competenceMapper.competenceToCompetenceDto(saved);
     }
 
     @Override
-    public List<Competence> getAllCompetence() {
-        return List.of();
+    public List<CompetenceDto> getAllCompetences() {
+        List<Competence> competences = competenceRepository.findAll();
+        return competences.stream()
+                .map(competenceMapper::competenceToCompetenceDto)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 public interface CompetenceService {
 
     CompetenceDto createCompetence (CompetenceDto dto);
-    List<Competence> getAllCompetence ();
+    List<CompetenceDto> getAllCompetences();
     Competence UpdateCompetence(Long id , CompetenceDto dto);
     Competence getCompetenceById (Long id);
     void deleteCompetence(Long id);

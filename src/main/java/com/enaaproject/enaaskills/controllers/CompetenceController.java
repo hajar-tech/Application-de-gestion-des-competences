@@ -5,10 +5,9 @@ import com.enaaproject.enaaskills.models.Competence;
 import com.enaaproject.enaaskills.services.interfaceServices.CompetenceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/competences")
@@ -23,5 +22,10 @@ public class CompetenceController {
     @PostMapping("/add")
     public ResponseEntity<CompetenceDto> create(@RequestBody CompetenceDto dto) {
         return ResponseEntity.ok(competenceService.createCompetence(dto));
+    }
+
+    @GetMapping
+    public List<CompetenceDto> getAll() {
+        return competenceService.getAllCompetences();
     }
 }
