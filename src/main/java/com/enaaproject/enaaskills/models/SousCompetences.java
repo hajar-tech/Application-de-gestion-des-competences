@@ -1,5 +1,6 @@
 package com.enaaproject.enaaskills.models;
 
+import com.enaaproject.enaaskills.enums.StatutCompetence;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,9 +11,21 @@ public class SousCompetences {
 
     private String titre;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    private StatutCompetence statut = StatutCompetence.En_Attente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competence_id")
     private Competence competence;
+
+
+    public StatutCompetence getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutCompetence statut) {
+        this.statut = statut;
+    }
 
     public Long getId() {
         return id;

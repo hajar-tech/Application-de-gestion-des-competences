@@ -1,9 +1,11 @@
 package com.enaaproject.enaaskills.services.implimentationServices;
 
-import com.enaaproject.enaaskills.dtos.CompetenceCreationDto;
+import com.enaaproject.enaaskills.dtos.CompetenceDto;
+import com.enaaproject.enaaskills.mappers.CompetenceMapper;
 import com.enaaproject.enaaskills.models.Competence;
 import com.enaaproject.enaaskills.models.SousCompetences;
 import com.enaaproject.enaaskills.repositories.CompetenceRepository;
+import com.enaaproject.enaaskills.repositories.SousCompetenceRepository;
 import com.enaaproject.enaaskills.services.interfaceServices.CompetenceService;
 import org.springframework.stereotype.Service;
 
@@ -14,25 +16,22 @@ import java.util.stream.Collectors;
 public class CompetenceServiceImpl implements CompetenceService {
 
     private final CompetenceRepository competenceRepository;
+    private  final SousCompetenceRepository sousCompetenceRepository;
+    private final CompetenceMapper competenceMapper;
 
-    public CompetenceServiceImpl (CompetenceRepository competenceRepository){
+
+    public CompetenceServiceImpl (CompetenceRepository competenceRepository , SousCompetenceRepository sousCompetenceRepository , CompetenceMapper competenceMapper){
         this.competenceRepository = competenceRepository;
+        this.competenceMapper = competenceMapper;
+        this.sousCompetenceRepository = sousCompetenceRepository;
     }
 
     @Override
-    public Competence createCompetence(CompetenceCreationDto dto) {
-
-        Competence competence = new Competence();
-        competence.setTitre(dto.titre());
-        List<SousCompetences> sousCompetences = dto.sousCompetences().stream()
-                .map(titre->{
-                    SousCompetences sc = new SousCompetences();
-                    sc.setTitre(titre);
-                    sc.setCompetence(competence);
-                    return sc;
-                }).collect(Collectors.toList());
-        competence.setSousCompetences(sousCompetences);
-        return competenceRepository.save(competence);
+    public CompetenceDto createCompetence(CompetenceDto dto) {
+        Competence competence = competenceMapper.competenceDtoToCompetence(dto);
+        competence.setId(null);//nouvelle entité
+        Competence saved = competenceRepository.save(competence);
+        return competenceMapper.competenceToCompetenceDto(saved);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class CompetenceServiceImpl implements CompetenceService {
     }
 
     @Override
-    public Competence UpdateCompetence(Long id, CompetenceCreationDto dto) {
+    public Competence UpdateCompetence(Long id, CompetenceDto dto) {
         return null;
     }
 

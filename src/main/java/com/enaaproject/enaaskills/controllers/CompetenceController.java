@@ -1,8 +1,7 @@
 package com.enaaproject.enaaskills.controllers;
 
-import com.enaaproject.enaaskills.dtos.CompetenceCreationDto;
+import com.enaaproject.enaaskills.dtos.CompetenceDto;
 import com.enaaproject.enaaskills.models.Competence;
-import com.enaaproject.enaaskills.repositories.CompetenceRepository;
 import com.enaaproject.enaaskills.services.interfaceServices.CompetenceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class CompetenceController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Competence> create(@RequestBody CompetenceCreationDto dto) {
-        return new ResponseEntity<>(competenceService.createCompetence(dto), HttpStatus.CREATED);
+    public ResponseEntity<CompetenceDto> create(@RequestBody CompetenceDto dto) {
+        return ResponseEntity.ok(competenceService.createCompetence(dto));
     }
 }

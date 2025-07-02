@@ -1,6 +1,6 @@
 package com.enaaproject.enaaskills.services.interfaceServices;
 
-import com.enaaproject.enaaskills.dtos.CompetenceCreationDto;
+import com.enaaproject.enaaskills.dtos.CompetenceDto;
 import com.enaaproject.enaaskills.models.Competence;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public interface CompetenceService {
 
-    Competence createCompetence (CompetenceCreationDto dto);
+    CompetenceDto createCompetence (CompetenceDto dto);
     List<Competence> getAllCompetence ();
-    Competence UpdateCompetence(Long id , CompetenceCreationDto dto);
+    Competence UpdateCompetence(Long id , CompetenceDto dto);
     Competence getCompetenceById (Long id);
     void deleteCompetence(Long id);
 
