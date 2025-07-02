@@ -53,8 +53,10 @@ public class CompetenceServiceImpl implements CompetenceService {
     }
 
     @Override
-    public Competence getCompetenceById(Long id) {
-        return null;
+    public CompetenceDto getCompetenceById(Long id) {
+        Competence c = competenceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Compétence non trouvée"));
+        return competenceMapper.competenceToCompetenceDto(c);
     }
 
     @Override

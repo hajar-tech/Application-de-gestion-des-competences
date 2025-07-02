@@ -12,7 +12,7 @@ public interface CompetenceService {
     CompetenceDto createCompetence (CompetenceDto dto);
     List<CompetenceDto> getAllCompetences();
     Competence UpdateCompetence(Long id , CompetenceDto dto);
-    Competence getCompetenceById (Long id);
+    CompetenceDto getCompetenceById(Long id);
     void deleteCompetence(Long id);
 
 }
