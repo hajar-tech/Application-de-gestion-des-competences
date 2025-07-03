@@ -1,6 +1,9 @@
 package com.enaaproject.enaaskills.services.implimentationServices;
 
+
 import com.enaaproject.enaaskills.dtos.CompetenceDto;
+import com.enaaproject.enaaskills.dtos.SousCompetenceDto;
+import com.enaaproject.enaaskills.enums.StatutCompetence;
 import com.enaaproject.enaaskills.mappers.CompetenceMapper;
 import com.enaaproject.enaaskills.models.Competence;
 import com.enaaproject.enaaskills.models.SousCompetences;
@@ -48,9 +51,37 @@ public class CompetenceServiceImpl implements CompetenceService {
     }
 
     @Override
-    public Competence UpdateCompetence(Long id, CompetenceDto dto) {
-        return null;
+    public CompetenceDto updateCompetence(Long id, CompetenceDto dto) {
+        Competence existing = competenceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Compétence non trouvée"));
+
+        existing.setTitre(dto.titre());
+        existing.setCode(dto.code());
+
+        // mise à jour des sous-compétences existantes
+        for (SousCompetenceDto scDto : dto.sousCompetences()) {
+            SousCompetences sc = sousCompetenceRepository.findById(scDto.id())
+                    .orElseThrow(() -> new RuntimeException("Sous-compétence non trouvée"));
+
+            sc.setTitre(scDto.titre());
+            sc.setStatut(StatutCompetence.valueOf(scDto.statut().toUpperCase()));
+            sousCompetenceRepository.save(sc);
+        }
+
+        return competenceMapper.competenceToCompetenceDto(existing);
     }
+
+
+
+//    public CompetenceDto updateCompetence(Long id, CompetenceDto dto) {
+//        Competence existing = competenceRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Compétence non trouvée"));
+//        existing.setTitre(dto.titre());
+//        existing.setCode(dto.code());
+//        // On ne modifie pas le statut ici : validation automatique
+//        Competence updated = competenceRepository.save(existing);
+//        return competenceMapper.competenceToCompetenceDto(updated);
+//    }
 
     @Override
     public CompetenceDto getCompetenceById(Long id) {
@@ -64,3 +95,5 @@ public class CompetenceServiceImpl implements CompetenceService {
 
     }
 }
+
+
