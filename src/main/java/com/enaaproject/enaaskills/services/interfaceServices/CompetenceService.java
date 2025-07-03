@@ -14,5 +14,6 @@ public interface CompetenceService {
     CompetenceDto updateCompetence(Long id, CompetenceDto dto);
     CompetenceDto getCompetenceById(Long id);
     void deleteCompetence(Long id);
+    CompetenceDto validerAutomatiquementCompetence(Long id);
 
 }

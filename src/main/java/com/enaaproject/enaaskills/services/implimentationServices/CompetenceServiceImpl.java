@@ -96,6 +96,37 @@ public class CompetenceServiceImpl implements CompetenceService {
         competenceRepository.deleteById(id);
 
     }
+
+    @Override
+    public CompetenceDto validerAutomatiquementCompetence(Long id) {
+
+        Competence competence = competenceRepository.findById(id).orElseThrow(()-> new RuntimeException("Compétence non trouvée"));
+
+        List<SousCompetences> sousCompetences = competence.getSousCompetences();
+
+        if(sousCompetences == null || sousCompetences.isEmpty()){
+            competence.setStatut(StatutCompetence.EN_ATTENTE);
+        }
+        else {
+            long isValide = sousCompetences.stream()
+                    .filter(sc -> sc.getStatut().name().equalsIgnoreCase("VALIDE"))
+                    .count();
+
+            long nonValide = sousCompetences.stream()
+                    .filter(sc -> sc.getStatut().name().equalsIgnoreCase("NON_VALIDE"))
+                    .count();
+
+            if (isValide > nonValide || isValide == nonValide){
+                competence.setStatut(StatutCompetence.VALIDE);
+            }else {
+                competence.setStatut(StatutCompetence.NON_VALIDE);
+            }
+        }
+
+        competenceRepository.save(competence);
+
+        return competenceMapper.competenceToCompetenceDto(competence);
+    }
 }
 
 
