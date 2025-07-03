@@ -1,10 +1,7 @@
 package com.enaaproject.enaaskills.controllers;
 
 import com.enaaproject.enaaskills.dtos.CompetenceDto;
-import com.enaaproject.enaaskills.models.Competence;
 import com.enaaproject.enaaskills.services.interfaceServices.CompetenceService;
-import com.sun.source.doctree.CommentTree;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
