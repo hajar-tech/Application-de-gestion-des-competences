@@ -11,7 +11,7 @@ public interface CompetenceService {
 
     CompetenceDto createCompetence (CompetenceDto dto);
     List<CompetenceDto> getAllCompetences();
-    Competence UpdateCompetence(Long id , CompetenceDto dto);
+    CompetenceDto updateCompetence(Long id, CompetenceDto dto);
     CompetenceDto getCompetenceById(Long id);
     void deleteCompetence(Long id);
 

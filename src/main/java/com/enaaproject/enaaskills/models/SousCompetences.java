@@ -12,7 +12,7 @@ public class SousCompetences {
     private String titre;
 
     @Enumerated(EnumType.STRING)
-    private StatutCompetence statut = StatutCompetence.En_Attente;
+    private StatutCompetence statut = StatutCompetence.EN_ATTENTE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competence_id")

@@ -16,7 +16,7 @@ public class Competence {
     private String titre;
 
     @Enumerated(EnumType.STRING)
-    private StatutCompetence statut = StatutCompetence.En_Attente;
+    private StatutCompetence statut = StatutCompetence.EN_ATTENTE;
 
     @OneToMany(mappedBy = "competence", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SousCompetences> sousCompetences = new ArrayList<>();
