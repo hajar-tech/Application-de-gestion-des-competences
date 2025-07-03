@@ -93,6 +93,8 @@ public class CompetenceServiceImpl implements CompetenceService {
     @Override
     public void deleteCompetence(Long id) {
 
+        competenceRepository.deleteById(id);
+
     }
 }
 
