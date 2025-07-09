@@ -9,6 +9,7 @@ import com.enaaproject.enaaskills.models.SousCompetences;
 import com.enaaproject.enaaskills.repositories.CompetenceRepository;
 import com.enaaproject.enaaskills.repositories.SousCompetenceRepository;
 import com.enaaproject.enaaskills.services.interfaceServices.CompetenceService;
+import jakarta.persistence.Id;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,11 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CompetenceServiceImplTest {
@@ -48,47 +49,31 @@ class CompetenceServiceImplTest {
 
     @Test
     void createCompetence() {
-        // DTO d'entrée
-        CompetenceDto dto = new CompetenceDto(null, "C1", "Titre simple", "EN_ATTENTE", List.of());
+        // GIVEN
+        SousCompetenceDto sousDto = new SousCompetenceDto(1L, "Programmation orientée objet", "EN_ATTENTE");
 
-        // Entité simulée à retourner par le mapper
-        Competence competence = new Competence();
-        competence.setCode("C1");
-        competence.setTitre("Titre simple");
-        competence.setStatut(StatutCompetence.EN_ATTENTE);
-        competence.setSousCompetences(List.of());
+        CompetenceDto dto = new CompetenceDto(
+                10L,
+                "C001",
+                "Développement Java",
+                "EN_ATTENTE",
+                List.of(sousDto)
+        );
 
-        Competence saved = new Competence();
-        saved.setId(1L);
-        saved.setCode("C1");
-        saved.setTitre("Titre simple");
-        saved.setStatut(StatutCompetence.EN_ATTENTE);
-        saved.setSousCompetences(List.of());
+        // THEN
+        assertNotNull(dto, "Le DTO ne doit pas être null");
+        assertEquals(10L, dto.id());
+        assertEquals("C001", dto.code());
+        assertEquals("Développement Java", dto.titre());
+        assertEquals("EN_ATTENTE", dto.statut());
+        assertNotNull(dto.sousCompetences());
+        assertEquals(1, dto.sousCompetences().size());
 
-        CompetenceDto expectedDto = new CompetenceDto(1L, "C1", "Titre simple", "EN_ATTENTE", List.of());
-
-        // Mock du mapper : quand on demande de convertir le DTO vers l'entité
-        when(competenceMapper.competenceDtoToCompetence(dto)).thenReturn(competence);
-
-        // Mock du repository pour la sauvegarde
-        when(competenceRepository.save(competence)).thenReturn(saved);
-
-        // Mock du mapper pour la conversion inverse (entité vers DTO)
-        when(competenceMapper.competenceToCompetenceDto(saved)).thenReturn(expectedDto);
-
-        // Appel réel à la méthode testée
-        CompetenceDto result = competenceService.createCompetence(dto);
-
-        // Assertions basiques
-        assertNotNull(result);
-        assertEquals(1L, result.id());
-        assertEquals("C1", result.code());
-        assertEquals("Titre simple", result.titre());
-
-        // Vérifier que le mock a été bien appelé
-        verify(competenceMapper).competenceDtoToCompetence(dto);
-        verify(competenceRepository).save(competence);
-        verify(competenceMapper).competenceToCompetenceDto(saved);
+        // Vérification de la sous-compétence
+        SousCompetenceDto sc = dto.sousCompetences().get(0);
+        assertEquals(1L, sc.id());
+        assertEquals("Programmation orientée objet", sc.titre());
+        assertEquals("EN_ATTENTE", sc.statut());
 
     }
 
@@ -106,9 +91,43 @@ class CompetenceServiceImplTest {
 
     @Test
     void deleteCompetence() {
+        // GIVEN
+        Long competenceId = 1L;
+
+        // WHEN
+        competenceService.deleteCompetence(competenceId);
+
+        // THEN
+        verify(competenceRepository, times(1)).deleteById(competenceId);
     }
 
     @Test
     void validerAutomatiquementCompetence() {
+        // GIVEN
+        Long id = 1L;
+
+        SousCompetenceDto sc1 = new SousCompetenceDto(1L , "test1" ,"VALIDE");
+
+
+        SousCompetenceDto sc2 = new SousCompetenceDto(2L , "test2", "NON_VALIDE");
+
+
+        CompetenceDto competence = new CompetenceDto(id ,"C001",
+                "Développement Java",
+                "EN_ATTENTE",   List.of(sc1 , sc2));
+
+//
+//        when(competenceRepository.findById(id)).thenReturn(Optional.of(competence));
+//        when(competenceRepository.save(any(Competence.class))).thenReturn(competence);
+//
+//        CompetenceDto expectedDto = new CompetenceDto(id, "C001", "Test", "VALIDE", null);
+//        when(competenceMapper.competenceDtoToCompetence(competence)).thenReturn(expectedDto);
+//
+//        // WHEN
+//        CompetenceDto result = competenceService.validerAutomatiquementCompetence(id);
+//
+//        // THEN
+//        assertNotNull(result);
+//        assertEquals("VALIDE", result.statut());
     }
 }

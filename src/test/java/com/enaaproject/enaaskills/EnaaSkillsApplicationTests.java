@@ -10,4 +10,9 @@ class EnaaSkillsApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void getAll(){
+
+    }
+
 }
